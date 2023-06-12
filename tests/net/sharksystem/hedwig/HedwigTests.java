@@ -91,5 +91,4 @@ public class HedwigTests {
                         "data2Encrypt".getBytes(), "Bob", asapKeyStore);
 
     }
-
 }
