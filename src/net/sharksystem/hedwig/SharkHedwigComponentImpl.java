@@ -18,6 +18,10 @@ public class SharkHedwigComponentImpl extends AbstractSharkComponent
         this.sharkPKI = sharkPKI;
     }
 
+    public SharkPKIComponent getSharkPKI() {
+        return this.sharkPKI;
+    }
+
     @Override
     public void onStart(ASAPPeer asapPeer) throws SharkException {
         // remember peer

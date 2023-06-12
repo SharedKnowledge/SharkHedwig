@@ -4,6 +4,8 @@ import net.sharksystem.SharkException;
 import net.sharksystem.SharkPeer;
 import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.asap.ASAPSecurityException;
+import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
+import net.sharksystem.asap.crypto.ASAPKeyStore;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,7 @@ public class HedwigTests {
         return (SharkHedwigComponent)sharkPeer.getComponent(SharkHedwigComponent.class);
     }
 
-    @Test
+    @Test // should run
     public void setupTest1() throws SharkException, IOException, InterruptedException {
         // clean up data from previous tests
         SharkTestPeerFS.removeFolder(ROOT_DIRECTORY);
@@ -74,4 +76,20 @@ public class HedwigTests {
 
         // check for results
     }
+
+    @Test // TODO - buggy
+    public void how2Encrypt() throws SharkException {
+        /////////////////// setup alice
+        SharkTestPeerFS aliceSharkPeer = new SharkTestPeerFS(ALICE_NAME, ALICE_FOLDER);
+        SharkHedwigComponent aliceHedwig = this.setupComponent(aliceSharkPeer);
+        SharkPKIComponent alicePKI = aliceHedwig.getSharkPKI();
+        ASAPKeyStore asapKeyStore = alicePKI.getASAPKeyStore();
+
+        // example
+        byte[] encrypted4Bob =
+                ASAPCryptoAlgorithms.produceEncryptedMessagePackage(
+                        "data2Encrypt".getBytes(), "Bob", asapKeyStore);
+
+    }
+
 }
