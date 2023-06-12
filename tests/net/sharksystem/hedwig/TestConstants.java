@@ -10,4 +10,6 @@ public interface TestConstants {
     String CLARA_NAME = "Clara";
     String DAVID_ID = "David_ID";
     String DAVID_NAME = "David";
+    byte[] LOST_BYTES = new byte[] {4, 8, 15, 16, 23, 42};
+
 }

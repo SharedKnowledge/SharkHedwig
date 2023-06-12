@@ -6,11 +6,13 @@ import net.sharksystem.SharkTestPeerFS;
 import net.sharksystem.asap.ASAPSecurityException;
 import net.sharksystem.asap.crypto.ASAPCryptoAlgorithms;
 import net.sharksystem.asap.crypto.ASAPKeyStore;
+import net.sharksystem.pki.HelperPKITests;
 import net.sharksystem.pki.SharkPKIComponent;
 import net.sharksystem.pki.SharkPKIComponentFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.security.PublicKey;
 
 import static net.sharksystem.hedwig.TestConstants.*;
 
@@ -77,18 +79,24 @@ public class HedwigTests {
         // check for results
     }
 
-    @Test // TODO - buggy
-    public void how2Encrypt() throws SharkException {
+    @Test // see also https://github.com/SharedKnowledge/ASAPJava/wiki/Cryptography#encrypting
+    public void how2Encrypt() throws SharkException, IOException {
         /////////////////// setup alice
+        SharkTestPeerFS.removeFolder(ROOT_DIRECTORY);
         SharkTestPeerFS aliceSharkPeer = new SharkTestPeerFS(ALICE_NAME, ALICE_FOLDER);
-        SharkHedwigComponent aliceHedwig = this.setupComponent(aliceSharkPeer);
+        SharkHedwigComponent aliceHedwig = (SharkHedwigComponent) setupComponent(aliceSharkPeer);
         SharkPKIComponent alicePKI = aliceHedwig.getSharkPKI();
+        aliceSharkPeer.start();
+
+        // we need example data
+        String idStart = HelperPKITests.fillWithExampleData(alicePKI);
+        // we need an ID.
+        String francisID = HelperPKITests.getPeerID(idStart, HelperPKITests.FRANCIS_NAME);
+
         ASAPKeyStore asapKeyStore = alicePKI.getASAPKeyStore();
 
-        // example
-        byte[] encrypted4Bob =
+        byte[] encryptedData4Francis =
                 ASAPCryptoAlgorithms.produceEncryptedMessagePackage(
-                        "data2Encrypt".getBytes(), "Bob", asapKeyStore);
-
+                        TestConstants.LOST_BYTES, francisID, asapKeyStore);
     }
 }
